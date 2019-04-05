@@ -1,0 +1,78 @@
+# request externas
+http:
+  port: 8080
+
+# https:
+#   port: 9443
+#   hostname: localhost
+#   tls:
+#     "*.demo.io":
+#         key: example/keys/demo.io.key.pem
+#         cert: example/keys/demo.io.cert.pem
+#     "default":
+#         key: example/keys/eg.io.key.pem
+#         cert: example/keys/eg.io.cert.pem
+
+#request internas 
+admin:
+  port: 9876
+  host: localhost
+
+
+# endPoints de las apis (microservicios) y como se les referenciara
+apiEndpoints:
+  api:
+    host: localhost
+    paths: '/ip'
+#  api:                  # nombre, usado como referencia en pipeline.
+#     host: '*.com'       # [requerido], '*' no verificará el nombre del host, '*.com' soporte de patrón de comodín(*)
+#     paths:
+#       - '/v1/*'         # cadena o matriz de cadenas , despues del host /v1/* hara referencia al microservicio  , api
+#       - '/v2/*'
+
+#  example:              
+#     host: 'example.com'
+#     paths: /v2/*        
+
+#  example2:              # Es posible proporcionar una serie de condiciones coincidentes en el mismo ENDPOINT API
+#     - host: 'example2.com'
+#       paths: /v2/*
+#       methods: ["GET", "OPTIONS"]
+#       scopes: ["example2:read"]
+
+#     - host: 'example2.com'
+#       paths: /v2/*
+#       methods: ["PUT", "POST", "PATCH", "DELETE"]
+#       scopes: ["example2:write"]
+
+
+serviceEndpoints:
+  httpbin:           # nombre, usado como referencia en pipeline.
+    url: 'https://httpbin.org' # El protocolo y el nombre de host a las solicitudes de proxy
+  dogs:                       
+    urls:                     # Se pueden usar múltiples urls con balanceo de carga
+      - "http://dogs1.example.com"
+      - "http://dogs2.example.com"
+
+
+policies:
+  - basic-auth
+  - cors
+  - expression
+  - key-auth
+  - log
+  - oauth2
+  - proxy
+  - rate-limit
+pipelines:
+  default:
+    apiEndpoints:
+      - api
+    policies:
+    # Uncomment `key-auth:` when instructed to in the Getting Started guide.
+    - key-auth: 3YobFKTXIu6XIAi33Juz4L:1IaOaPnCZsZKFUjQXkxHC6,
+                4pCp1HGGVaIv7hvw0pun1x:0JA2qtEslmC3whu9xMcMaK
+    - proxy:
+      - action:
+          serviceEndpoint: httpbin 
+          changeOrigin: true
