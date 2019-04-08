@@ -1,5 +1,7 @@
 # request externas
 http:
+  # port: 3000
+  # host: localhost
   port: 8080
 
 # https:
@@ -24,6 +26,11 @@ apiEndpoints:
   api:
     host: localhost
     paths: '/ip'
+  hero:
+    host: localhost
+    paths: ['/*', '/usuario/*']
+    methods: ["GET", "POST", "PUT", "DELETE"]
+    # scopes: ["localhost:id"]
 #  api:                  # nombre, usado como referencia en pipeline.
 #     host: '*.com'       # [requerido], '*' no verificará el nombre del host, '*.com' soporte de patrón de comodín(*)
 #     paths:
@@ -53,6 +60,8 @@ serviceEndpoints:
     urls:                     # Se pueden usar múltiples urls con balanceo de carga
       - "http://dogs1.example.com"
       - "http://dogs2.example.com"
+  heroku:
+    url: 'https://cpuma-apirest-nodejs.herokuapp.com'  # api en heroku
 
 
 policies:
@@ -65,14 +74,15 @@ policies:
   - proxy
   - rate-limit
 pipelines:
-  default:
+  # default:         
+  - name: heroku
     apiEndpoints:
-      - api
+      # - api
+      - hero
     policies:
     # Uncomment `key-auth:` when instructed to in the Getting Started guide.
-    - key-auth: 3YobFKTXIu6XIAi33Juz4L:1IaOaPnCZsZKFUjQXkxHC6,
-                4pCp1HGGVaIv7hvw0pun1x:0JA2qtEslmC3whu9xMcMaK
+    # - key-auth: 3x5NADCxHazoEeXMOjFAtG:78IWF9k3sUbcn0iQpYQMNM
     - proxy:
       - action:
-          serviceEndpoint: httpbin 
+          serviceEndpoint: heroku 
           changeOrigin: true
