@@ -81,7 +81,7 @@ pipelines:
       - hero
     policies:
     # Uncomment `key-auth:` when instructed to in the Getting Started guide.
-    # - key-auth: 3x5NADCxHazoEeXMOjFAtG:78IWF9k3sUbcn0iQpYQMNM
+    - key-auth: 1PJMsMPDxERqRzNfe8l8Wt:6Kqn2R9XnG8mpiigQ70rnL
     - proxy:
       - action:
           serviceEndpoint: heroku 

@@ -1,7 +1,10 @@
 # Core
 db:
   redis:
-    emulate: true
+    # emulate: true
+    # namespace: EG
+    emulate: localhost
+    port: 6379
     namespace: EG
 
 #plugins:
