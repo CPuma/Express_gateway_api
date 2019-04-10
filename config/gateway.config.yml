@@ -1,7 +1,6 @@
 # request externas
 http:
-  # port: 3000
-  # host: localhost
+  # port: 8080
   port: 8080
 
 # https:
@@ -19,15 +18,18 @@ http:
 admin:
   port: 9876
   host: localhost
+  # host: 10.10.30.111
 
 
 # endPoints de las apis (microservicios) y como se les referenciara
 apiEndpoints:
   api:
-    host: localhost
+    # host: localhost
+    host: 10.10.30.111
     paths: '/ip'
   hero:
-    host: localhost
+    host: 10.10.30.111
+    # host: localhost
     paths: ['/*', '/usuario/*']
     methods: ["GET", "POST", "PUT", "DELETE"]
     # scopes: ["localhost:id"]
@@ -75,14 +77,29 @@ policies:
   - rate-limit
 pipelines:
   # default:         
-  - name: heroku
+  - name: herokupipe
     apiEndpoints:
-      # - api
       - hero
     policies:
-    # Uncomment `key-auth:` when instructed to in the Getting Started guide.
-    - key-auth: 1PJMsMPDxERqRzNfe8l8Wt:6Kqn2R9XnG8mpiigQ70rnL
-    - proxy:
+    # - cors:       ##### https://www.express-gateway.io/docs/policies/cors/ ### LEER
+    #   - action:
+    #       origin: http://www.example.com
+    #       credentials: true
+    - key-auth: 5EV58z7I95YwaJRpNBwa1c:4a1i2H6gBOXDujlK5MmJ2l ,
+                0AK26n720A7VbHYSodj11N:3OuOmGpx1QI13Hll3jhOmW #apikey
+    - proxy:  
       - action:
           serviceEndpoint: heroku 
+          changeOrigin: true
+          # apiKeyHeader: 'MY-KEY-HEADER'  # cambia el Authorization
+          # apiKeyHeaderScheme: ''  # elimina o cambia  el 'apikey' antes de la key-auth
+  - name: httpbinpipe
+    apiEndpoints:
+      - api
+    policies:
+    # Uncomment `key-auth:` when instructed to in the Getting Started guide.
+    # - key-auth: 
+    - proxy:
+      - action:
+          serviceEndpoint: httpbin 
           changeOrigin: true
